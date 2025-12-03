@@ -1,0 +1,9 @@
+Line 1: Hello World Line 2: This is a test for get_next_line. Line 3:
+Contains multiple words.
+
+Line 5: Empty line above.
+
+A very very very very very long line to test buffer handling and ensure
+that your function can read beyond the buffer size without issues.
+
+Line with no newline at end
