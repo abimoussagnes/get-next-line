@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aabi-mou <aabi-mou@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/14 14:12:59 by aabi-mou          #+#    #+#             */
-/*   Updated: 2025/12/03 15:54:27 by aabi-mou         ###   ########.fr       */
+/*   Created: 2025/12/05 19:36:41 by aabi-mou          #+#    #+#             */
+/*   Updated: 2025/12/05 19:40:56 by aabi-mou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
@@ -24,27 +24,23 @@ size_t	ft_strlen(char *s)
 	return (i);
 }
 
-char	*ft_strchr(char *s, int c)
+char	*ft_strchr(const char *s, int c)
 {
-	unsigned char	n;
-	int				i;
+	unsigned char	val;
 
-	if (!s)
-		return (0);
-	n = (unsigned char)c;
-	i = ft_strlen(s);
-	while (i >= 0)
+	val = (unsigned char)c;
+	while (*s != val)
 	{
-		if (s[i] == n)
+		if (!*s)
 		{
-			return ((char *)s + i);
+			return (0);
 		}
-		i--;
+		s++;
 	}
-	return (0);
+	return ((char *)s);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	int		i;
 	size_t	len;
@@ -65,7 +61,29 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (p);
 }
 
-char	*ft_substr(char *s, unsigned int start, size_t len)
+char	*ft_strdup(const char *s)
+{
+	char	*p;
+	size_t	i;
+	size_t	size;
+
+	if (!s)
+		return (0);
+	size = ft_strlen(s);
+	p = malloc(sizeof(char) * (size + 1));
+	if (!p)
+		return (0);
+	i = 0;
+	while (i < size)
+	{
+		p[i] = s[i];
+		i++;
+	}
+	p[i] = '\0';
+	return (p);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
 	char	*p;
@@ -83,28 +101,6 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	while (i < len)
 	{
 		p[i] = s[start + i];
-		i++;
-	}
-	p[i] = '\0';
-	return (p);
-}
-
-char	*ft_strdup(char *s)
-{
-	char	*p;
-	size_t	i;
-	size_t	size;
-
-	if (!s)
-		return (0);
-	size = ft_strlen(s);
-	p = malloc(sizeof(char) * (size + 1));
-	if (!p)
-		return (0);
-	i = 0;
-	while (i < size)
-	{
-		p[i] = s[i];
 		i++;
 	}
 	p[i] = '\0';

@@ -5,99 +5,99 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aabi-mou <aabi-mou@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/03 15:52:08 by aabi-mou          #+#    #+#             */
-/*   Updated: 2025/12/03 15:58:17 by aabi-mou         ###   ########.fr       */
+/*   Created: 2025/12/09 15:26:17 by aabi-mou          #+#    #+#             */
+/*   Updated: 2025/12/09 15:28:43 by aabi-mou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*extract_line(char *storage)
+char	*read_until_newline(int fd, char *stash)
 {
-	int		i = 0;
+	char	*buffer;
+	ssize_t	bytes_read;
+
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	if (!stash)
+		stash = ft_strdup("");
+	if (!stash)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	bytes_read = 1;
+	while (!ft_strchr(stash, '\n') && bytes_read > 0)
+	{
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read == -1)
+		{
+			free(buffer);
+			free(stash);
+			return (NULL);
+		}
+		buffer[bytes_read] = '\0';
+		stash = ft_strjoin(stash, buffer);
+		if (!stash)
+		{
+			free(buffer);
+			return (NULL);
+		}
+	}
+	free(buffer);
+	return (stash);
+}
+
+char	*extract_line(char *stash)
+{
+	int		i;
 	char	*line;
 
-	if (!storage[i])
-		return (NULL);
-	while (storage[i] && storage[i] != '\n')
-		i++;
-	line = malloc(i + (storage[i] == '\n') + 1);
-	if (!line)
+	if (!stash || *stash == '\0')
 		return (NULL);
 	i = 0;
-	while (storage[i] && storage[i] != '\n')
-	{
-		line[i] = storage[i];
+	while (stash[i] && stash[i] != '\n')
 		i++;
-	}
-	if (storage[i] == '\n')
-	{
-		line[i] = '\n';
+	if (stash[i] == '\n')
 		i++;
-	}
-	line[i] = '\0';
+	line = ft_substr(stash, 0, i);
 	return (line);
 }
 
-static char	*clean_storage(char *storage)
+char	*update_stash(char *stash)
 {
-	int		i = 0;
-	int		j = 0;
-	char	*new_storage;
+	int		i;
+	char	*remaining;
 
-	while (storage[i] && storage[i] != '\n')
+	if (!stash)
+		return (NULL);
+	i = 0;
+	while (stash[i] && stash[i] != '\n')
 		i++;
-	if (!storage[i])
+	if (stash[i] == '\n')
+		i++;
+	if (stash[i] == '\0')
 	{
-		free(storage);
+		free(stash);
 		return (NULL);
 	}
-	new_storage = malloc(ft_strlen_gnl(storage) - i);
-	if (!new_storage)
-		return (NULL);
-	i++; // skip newline
-	while (storage[i])
-		new_storage[j++] = storage[i++];
-	new_storage[j] = '\0';
-	free(storage);
-	return (new_storage);
-}
-
-static char	*read_and_join(int fd, char *storage)
-{
-	char	*buffer;
-	int		bytes;
-
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (0);
-	bytes = 1;
-	while (!ft_strchr_gnl(storage, '\n') && bytes > 0)
-	{
-		bytes = read(fd, buffer, BUFFER_SIZE);
-		if (bytes == -1)
-		{
-			free(buffer);
-			return (0);
-		}
-		buffer[bytes] = '\0';
-		storage = ft_strjoin_gnl(storage, buffer);
-	}
-	free(buffer);
-	return (storage);
+	remaining = ft_substr(stash, i, ft_strlen(stash) - i);
+	free(stash);
+	return (remaining);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*storage;
+	static char	*stash;
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
-	storage = read_and_join(fd, storage);
-	if (!storage)
-		return (0);
-	line = extract_line(storage);
-	storage = clean_storage(storage);
+		return (NULL);
+	stash = read_until_newline(fd, stash);
+	if (!stash)
+		return (NULL);
+	line = extract_line(stash);
+	stash = update_stash(stash);
 	return (line);
 }
