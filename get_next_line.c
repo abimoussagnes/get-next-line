@@ -6,7 +6,7 @@
 /*   By: aabi-mou <aabi-mou@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:26:17 by aabi-mou          #+#    #+#             */
-/*   Updated: 2025/12/09 15:28:43 by aabi-mou         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:28:30 by aabi-mou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	*read_until_newline(int fd, char *stash)
 {
 	char	*buffer;
 	ssize_t	bytes_read;
+	char	*temp;
 
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
@@ -38,14 +39,22 @@ char	*read_until_newline(int fd, char *stash)
 			return (NULL);
 		}
 		buffer[bytes_read] = '\0';
-		stash = ft_strjoin(stash, buffer);
-		if (!stash)
+		temp = ft_strjoin(stash, buffer);
+		if (!temp)
 		{
 			free(buffer);
+			free(stash);
 			return (NULL);
 		}
+		free(stash);
+		stash = temp;
 	}
 	free(buffer);
+	if (bytes_read == 0 && stash[0] == '\0')
+	{
+		free(stash);
+		return (NULL);
+	}
 	return (stash);
 }
 
@@ -98,6 +107,12 @@ char	*get_next_line(int fd)
 	if (!stash)
 		return (NULL);
 	line = extract_line(stash);
+	if (!line)
+	{
+		free(stash);
+		stash = NULL;
+		return (NULL);
+	}
 	stash = update_stash(stash);
 	return (line);
 }

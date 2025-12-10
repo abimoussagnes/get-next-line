@@ -6,11 +6,13 @@
 /*   By: aabi-mou <aabi-mou@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 22:06:18 by aabi-mou          #+#    #+#             */
-/*   Updated: 2025/12/06 11:15:25 by aabi-mou         ###   ########.fr       */
+/*   Updated: 2025/12/09 15:57:45 by aabi-mou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "fcntl.h"
 #include "get_next_line.h"
+#include "stdio.h"
 
 int	main(void)
 {

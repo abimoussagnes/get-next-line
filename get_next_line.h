@@ -6,7 +6,7 @@
 /*   By: aabi-mou <aabi-mou@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:31:41 by aabi-mou          #+#    #+#             */
-/*   Updated: 2025/12/09 15:43:51 by aabi-mou         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:27:31 by aabi-mou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # include <limits.h>
 # include <stdlib.h>
+# include <string.h>
 # include <unistd.h>
 
 char	*get_next_line(int fd);

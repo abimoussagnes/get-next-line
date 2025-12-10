@@ -6,7 +6,7 @@
 /*   By: aabi-mou <aabi-mou@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 19:36:41 by aabi-mou          #+#    #+#             */
-/*   Updated: 2025/12/05 19:40:56 by aabi-mou         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:27:16 by aabi-mou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
+	if (!s)
+		return (0);
 	i = 0;
 	while (s[i])
 	{
@@ -28,6 +30,8 @@ char	*ft_strchr(const char *s, int c)
 {
 	unsigned char	val;
 
+	if (!s)
+		return (NULL);
 	val = (unsigned char)c;
 	while (*s != val)
 	{
