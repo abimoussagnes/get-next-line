@@ -13,7 +13,7 @@ The function returns the line including the terminating newline character (if pr
 ### Installation
 
 ```bash
-git clone git@vogsphere.42beirut.com:vogsphere/intra-uuid-c38e7635-1006-44c5-b72a-43b89a91fdf2-7078936-aabi-mou
+git clone https://github.com/abimoussagnes/get-next-line.git
 cd get-next-line
 ```
 
@@ -22,40 +22,27 @@ cd get-next-line
 Compile with your source files and define `BUFFER_SIZE`:
 
 ```bash
-cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c your_main.c -o program
+cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c get_next_line_test.c -o program
 ```
 
-### Usage Example
+### Testing
 
-```c
-#include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
+The project includes a test program in `get_next_line_test.c` that demonstrates basic usage. To run your own tests:
 
-int main(void)
-{
-    int fd;
-    char *line;
+1. **Modify the test file** (optional):
+   - Edit `get_next_line_test.c` to test different scenarios
+   - Change the input file path or buffer size as needed
 
-    fd = open("file.txt", O_RDONLY);
-    if (fd < 0)
-        return (1);
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("%s", line);
-        free(line);
-    }
-    close(fd);
-    return (0);
-}
-```
+2. **Compile and run**:
+   ```bash
+   cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c get_next_line_test.c -o gnl_test
+   ./gnl_test
+   ```
 
-## Requirements
-
-- Linux or Unix-like environment
-- GCC or compatible C compiler
-- Standard C library
-- POSIX-compliant `read()` function
+3. **Test with valgrind** (optional, for memory leak detection):
+   ```bash
+   valgrind --leak-check=yes ./gnl_test
+   ```
 
 ## Explanation
 
